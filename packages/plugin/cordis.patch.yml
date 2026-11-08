@@ -1,0 +1,4 @@
+- insert:
+    - id: chat-manager
+      name: '@dsh-chat-manager/plugin'
+      config: {}

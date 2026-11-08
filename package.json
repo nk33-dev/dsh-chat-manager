@@ -1,0 +1,29 @@
+{
+  "name": "dsh-chat-manager-workspace",
+  "private": true,
+  "license": "MIT",
+  "repository": "https://github.com/nk33-dev/dsh-chat-manager",
+  "type": "module",
+  "packageManager": "pnpm@11.3.0",
+  "scripts": {
+    "build": "pnpm --filter @dsh-chat-manager/plugin build",
+    "check": "tsc -p packages/plugin/tsconfig.host.json --noEmit && tsc -p packages/plugin/tsconfig.client.json --noEmit",
+    "test": "vitest run",
+    "pack:plugin": "pnpm build && pnpm --filter @dsh-chat-manager/plugin pack --out dist/chat-manager-%v.tgz && node scripts/verify-pack.mjs"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "~18.3.1",
+    "@types/react-dom": "^18.3.5",
+    "clsx": "^2.1.1",
+    "jsdom": "^29.1.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "tsdown": "0.22.2",
+    "tsx": "^4.23.13",
+    "typescript": "6.0.3",
+    "vitest": "4.1.11",
+    "zod": "4.4.3"
+  }
+}

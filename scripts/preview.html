@@ -1,0 +1,252 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Chat Manager 界面预览</title>
+<style>
+  /* Preview only: mirrors the plugin's stylesheet against the same Harness
+     tokens so the README can show the layout without a live session. */
+  :root {
+    --bg-base: #151517;
+    --bg-layer-1: #232324;
+    --bg-layer-2: #2c2c2e;
+    --bg-layer-3: #353638;
+    --border-l1: #ffffff0f;
+    --border-l2: #ffffff1f;
+    --label-primary: #f9fafb;
+    --label-secondary: #cfd3d6;
+    --label-tertiary: #adb2b8;
+    --label-caption: #81858c;
+    --error: #f25a5a;
+    --hover: #ffffff14;
+    --hover-danger: #f25a5a26;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg-base);
+    color: var(--label-primary);
+    font: 13px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Microsoft YaHei", sans-serif;
+  }
+  .frame { display: flex; height: 480px; }
+  .sidebar {
+    flex: 0 0 264px;
+    border-right: 1px solid var(--border-l2);
+    padding: 16px 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  .side-head { padding: 4px 8px 10px; color: var(--label-caption); font-size: 12px; }
+  .side-proj {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 8px; border-radius: 6px; color: var(--label-secondary);
+  }
+  .side-proj[data-on="true"] { background: var(--bg-layer-1); color: var(--label-primary); }
+  .side-sep { margin: 14px 8px 6px; color: var(--label-caption); font-size: 12px; }
+  .side-row {
+    display: flex; align-items: center; gap: 8px; justify-content: space-between;
+    padding: 7px 8px; border-radius: 6px; color: var(--label-secondary);
+  }
+  .side-row[data-on="true"] { background: var(--bg-layer-1); color: var(--label-primary); }
+  .side-row .when { color: var(--label-caption); font-size: 11px; }
+  .side-row .acts { display: flex; gap: 2px; opacity: 0.9; }
+  .icon-btn {
+    width: 24px; height: 24px; border: 0; border-radius: 4px; background: transparent;
+    color: var(--label-tertiary); display: inline-flex; align-items: center; justify-content: center;
+  }
+  .icon-btn.danger { background: var(--hover-danger); color: var(--error); }
+  .side-foot { margin-top: auto; display: flex; gap: 4px; padding: 8px; color: var(--label-caption); }
+
+  .page { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; padding: 20px 0 0; }
+  .header { display: flex; align-items: center; gap: 10px; padding: 0 24px; }
+  .header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+  .count {
+    height: 20px; padding: 0 7px; border-radius: var(--radius-sm);
+    background: var(--bg-layer-2); color: var(--label-tertiary); font-size: 11px; line-height: 20px;
+  }
+  .sub { margin: 6px 24px 0; color: var(--label-tertiary); font-size: 12px; }
+  .tabs {
+    align-self: flex-start; display: inline-flex; gap: 2px; margin: 14px 24px 0; padding: 2px;
+    border-radius: 6px; background: var(--bg-layer-1);
+  }
+  .tab {
+    height: 22px; padding: 0 11px; border: 0; border-radius: 4px; background: transparent;
+    color: var(--label-tertiary); font: inherit; font-size: 12px;
+  }
+  .tab[aria-selected="true"] { background: var(--bg-layer-3); color: var(--label-primary); }
+  .toolbar { display: flex; align-items: center; gap: 8px; padding: 14px 24px 0; }
+  .search {
+    flex: 1 1 auto; height: 26px; padding: 0 9px; border: 1px solid var(--border-l2);
+    border-radius: 4px; background: var(--bg-layer-1); color: var(--label-caption); font: inherit;
+  }
+  .switch { display: inline-flex; align-items: center; gap: 6px; color: var(--label-secondary); font-size: 12px; }
+  .switch input { width: 14px; height: 14px; margin: 0; accent-color: #7aaaff; }
+  .bulk {
+    display: flex; align-items: center; gap: 6px; margin: 12px 24px 0; padding: 5px 8px 5px 12px;
+    border-radius: 6px; background: var(--bg-layer-1); border: 1px solid var(--border-l1);
+    font-size: 12px; color: var(--label-secondary);
+  }
+  .bulk strong { color: var(--label-primary); font-weight: 600; }
+  .bulk .spacer { flex: 1 1 auto; }
+  .btn {
+    height: 24px; padding: 0 9px; border: 1px solid var(--border-l2); border-radius: 4px;
+    background: transparent; color: var(--label-primary); font: inherit; font-size: 12px;
+  }
+  .btn.ghost { border-color: transparent; color: var(--label-secondary); }
+  .btn.danger { border-color: transparent; background: var(--error); color: #fff; }
+  .list { padding: 10px 16px 24px; }
+  .item { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 6px; }
+  .item[data-on="true"] { background: var(--bg-layer-2); }
+  .item input { width: 14px; height: 14px; margin: 0; flex: 0 0 auto; accent-color: #7aaaff; }
+  .item-main { flex: 1 1 auto; min-width: 0; }
+  .title { color: var(--label-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .meta { color: var(--label-caption); font-size: 12px; }
+  .dot { margin: 0 5px; opacity: 0.5; }
+</style>
+<div class="frame">
+  <aside class="sidebar">
+    <div class="side-head">项目</div>
+    <div class="side-proj" data-on="true"><span>▰</span> 示例项目</div>
+    <div class="side-proj"><span>▰</span> 另一个项目</div>
+    <div class="side-sep">会话</div>
+    <div class="side-row"><span>整理接口文档</span><span class="when">昨天</span></div>
+    <div class="side-row" data-on="true">
+      <span>搜索页交互调整</span>
+      <span class="acts">
+        <span class="icon-btn"><svg viewBox="0 0 16 16" fill="none" stroke-width="1" width="14" height="14"><path d="M2.95 5.7v4.8a2.9 2.9 0 0 0 2.9 2.9h4.3a2.9 2.9 0 0 0 2.9-2.9V5.7" stroke="currentColor"></path><path d="m6 9.35 1.4 1.4 2.6-2.6" stroke="currentColor"></path><path d="M2.3 5h5.85M12.05 5h1.65" stroke="currentColor"></path><path d="M2.3 11h1.65M7.85 11h5.85" stroke="currentColor"></path></svg></span>
+        <span class="icon-btn"><svg viewBox="0 0 16 16" fill="none" stroke-width="1" width="14" height="14"><path d="M9.96976 1.70572L13.1554 3.93629L10.9019 8.12317L11.5158 11.605L10.7192 12.7427L2.52767 7.00693L3.3243 5.86922L6.80612 5.25528L9.96976 1.70572Z" stroke="currentColor"></path><path d="M6.05285 9.47511C6.27284 9.16094 6.70586 9.08458 7.02003 9.30457C7.3342 9.52455 7.41055 9.95757 7.19057 10.2717L3.98587 14.4708L3.21223 13.9291L6.05285 9.47511Z" stroke="currentColor"></path></svg></span>
+        <span class="icon-btn danger"><svg viewBox="0 0 16 16" fill="none" stroke-width="1" width="14" height="14"><path d="M1.28149 3.88831H14.7187" stroke="currentColor"></path><path d="M5.41602 3.88833V2.47962C5.41602 2.29282 5.52492 2.11366 5.71876 1.98157C5.9126 1.84948 6.17551 1.77527 6.44964 1.77527H9.55053C9.82466 1.77527 10.0876 1.84948 10.2814 1.98157C10.4753 2.11366 10.5842 2.29282 10.5842 2.47962V3.88833" stroke="currentColor"></path><path d="M2.57349 3.88831L3.19366 13.2943C3.21937 13.5502 3.33952 13.7872 3.53065 13.9593C3.72178 14.1313 3.97016 14.2259 4.22729 14.2246H11.7728C12.0299 14.2259 12.2783 14.1313 12.4694 13.9593C12.6605 13.7872 12.7807 13.5502 12.8064 13.2943L13.4266 3.88831" stroke="currentColor"></path><path d="M6.44946 6.98926V11.1238" stroke="currentColor"></path><path d="M9.55054 6.98926V11.1238" stroke="currentColor"></path></svg></span>
+      </span>
+    </div>
+    <div class="side-row"><span>修复导出乱码</span><span class="when">周二</span></div>
+    <div class="side-row"><span>补充单元测试</span><span class="when">周一</span></div>
+    <div class="side-foot"><span class="icon-btn" style="color:#f9fafb"><svg viewBox="0 0 16 16" fill="none" stroke-width="1" width="14" height="14"><path d="M1.28149 3.88831H14.7187" stroke="currentColor"></path><path d="M5.41602 3.88833V2.47962C5.41602 2.29282 5.52492 2.11366 5.71876 1.98157C5.9126 1.84948 6.17551 1.77527 6.44964 1.77527H9.55053C9.82466 1.77527 10.0876 1.84948 10.2814 1.98157C10.4753 2.11366 10.5842 2.29282 10.5842 2.47962V3.88833" stroke="currentColor"></path><path d="M2.57349 3.88831L3.19366 13.2943C3.21937 13.5502 3.33952 13.7872 3.53065 13.9593C3.72178 14.1313 3.97016 14.2259 4.22729 14.2246H11.7728C12.0299 14.2259 12.2783 14.1313 12.4694 13.9593C12.6605 13.7872 12.7807 13.5502 12.8064 13.2943L13.4266 3.88831" stroke="currentColor"></path><path d="M6.44946 6.98926V11.1238" stroke="currentColor"></path><path d="M9.55054 6.98926V11.1238" stroke="currentColor"></path></svg></span></div>
+  </aside>
+
+  <main class="page">
+    <div class="header">
+      <h1>回收站</h1>
+      <span class="count">2 个</span>
+    </div>
+    <p class="sub">删除的会话先放在这里，恢复后回到原来的项目和位置。</p>
+    <div class="tabs">
+      <button class="tab" aria-selected="true">回收站</button>
+      <button class="tab" aria-selected="false">会话</button>
+    </div>
+    <div class="toolbar">
+      <button class="btn">全部恢复</button>
+      <button class="btn ghost">清空回收站</button>
+    </div>
+    <div class="list">
+      <div class="item">
+        <div class="item-main">
+          <div class="title">旧版的接口文档整理</div>
+          <div class="meta">D:/Project/示例项目<span class="dot">·</span>2.4 MB<span class="dot">·</span>删除于 2026/11/7 18:20</div>
+        </div>
+        <button class="btn">恢复</button>
+        <button class="btn ghost">彻底删除</button>
+      </div>
+      <div class="item">
+        <div class="item-main">
+          <div class="title">废弃的样式重构尝试</div>
+          <div class="meta">D:/Project/示例项目<span class="dot">·</span>860 KB<span class="dot">·</span>删除于 2026/11/7 17:02</div>
+        </div>
+        <button class="btn">恢复</button>
+        <button class="btn ghost">彻底删除</button>
+      </div>
+    </div>
+  </main>
+</div>
+<style>
+  /* Second capture surface: the row menu and the confirmation it opens. */
+  .shot-two { display: none; height: 480px; background: var(--bg-base); }
+  .shot-two[data-on="true"] { display: flex; align-items: center; justify-content: center; gap: 48px; }
+  .menu-card {
+    width: 260px; padding: 6px; border-radius: 10px; background: var(--bg-layer-2);
+    border: 1px solid var(--border-l2); box-shadow: 0 16px 40px rgb(0 0 0 / 32%);
+  }
+  .menu-row {
+    display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 10px;
+    border-radius: 6px; color: var(--label-primary); font-size: 13px;
+  }
+  .menu-row .key { margin-left: auto; color: var(--label-caption); font-size: 11px; }
+  .menu-row[data-danger="true"] { background: var(--hover-danger); color: var(--error); }
+  .menu-sep { height: 1px; margin: 4px 8px; background: var(--border-l1); }
+  .dialog {
+    width: 400px; padding: 20px; border-radius: 12px; background: var(--bg-layer-2);
+    border: 1px solid var(--border-l2); box-shadow: 0 16px 40px rgb(0 0 0 / 32%);
+  }
+  .dialog h2 { margin: 0 0 8px; font-size: 15px; font-weight: 600; }
+  .dialog p { margin: 0; color: var(--label-secondary); }
+  .dialog .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+</style>
+<div class="shot-two" id="shot-two">
+  <div class="menu-card">
+    <div class="menu-row">置顶会话</div>
+    <div class="menu-row">重命名<span class="key">Ctrl+Alt+G</span></div>
+    <div class="menu-row">分叉会话<span class="key">Ctrl+Alt+F</span></div>
+    <div class="menu-sep"></div>
+    <div class="menu-row">复制 Session ID</div>
+    <div class="menu-row">在文件夹显示</div>
+    <div class="menu-sep"></div>
+    <div class="menu-row" data-danger="true">
+      <svg viewBox="0 0 16 16" fill="none" stroke-width="1" width="14" height="14">
+        <path d="M1.28149 3.88831H14.7187" stroke="currentColor"></path>
+        <path d="M5.41602 3.88833V2.47962C5.41602 2.29282 5.52492 2.11366 5.71876 1.98157C5.9126 1.84948 6.17551 1.77527 6.44964 1.77527H9.55053C9.82466 1.77527 10.0876 1.84948 10.2814 1.98157C10.4753 2.11366 10.5842 2.29282 10.5842 2.47962V3.88833" stroke="currentColor"></path>
+        <path d="M2.57349 3.88831L3.19366 13.2943C3.21937 13.5502 3.33952 13.7872 3.53065 13.9593C3.72178 14.1313 3.97016 14.2259 4.22729 14.2246H11.7728C12.0299 14.2259 12.2783 14.1313 12.4694 13.9593C12.6605 13.7872 12.7807 13.5502 12.8064 13.2943L13.4266 3.88831" stroke="currentColor"></path>
+        <path d="M6.44946 6.98926V11.1238" stroke="currentColor"></path>
+        <path d="M9.55054 6.98926V11.1238" stroke="currentColor"></path>
+      </svg>
+      删除会话
+    </div>
+    <div class="menu-row">归档会话<span class="key">Ctrl+Shift+A</span></div>
+  </div>
+
+  <div class="dialog">
+    <h2>删除「搜索页交互调整」？</h2>
+    <p>会话会移到回收站，8 秒内可撤销，之后仍能从回收站恢复。</p>
+    <div class="actions">
+      <button class="btn ghost">取消</button>
+      <button class="btn danger">删除</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .shot-three { display: none; height: 300px; background: var(--bg-base); padding: 32px 40px; }
+  .shot-three[data-on="true"] { display: block; }
+  .closeup {
+    width: 420px; padding: 10px; border-radius: 10px; background: var(--bg-layer-1);
+    border: 1px solid var(--border-l2);
+  }
+  .closeup .row {
+    display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 8px;
+    border-radius: 6px; color: var(--label-primary);
+  }
+  .closeup .row .acts { margin-left: auto; display: flex; gap: 4px; align-items: center; }
+  .closeup .row .when { color: var(--label-caption); font-size: 11px; }
+  .closeup .row.hot { background: var(--bg-layer-2); }
+  .closeup .row .dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; }
+</style>
+<div class="shot-three" id="shot-three">
+  <div class="closeup">
+    <div class="row"><span class="dot"></span> 整理接口文档 <span class="acts"><span class="when">昨天</span></span></div>
+    <div class="row hot">
+      <span class="dot"></span> 搜索页交互调整
+      <span class="acts">
+        <span class="icon-btn"><svg viewBox="0 0 16 16" fill="none" stroke-width="1" width="14" height="14"><path d="M2.95 5.7v4.8a2.9 2.9 0 0 0 2.9 2.9h4.3a2.9 2.9 0 0 0 2.9-2.9V5.7" stroke="currentColor"></path><path d="m6 9.35 1.4 1.4 2.6-2.6" stroke="currentColor"></path><path d="M2.3 5h5.85M12.05 5h1.65" stroke="currentColor"></path><path d="M2.3 11h1.65M7.85 11h5.85" stroke="currentColor"></path></svg></span>
+        <span class="icon-btn"><svg viewBox="0 0 16 16" fill="none" stroke-width="1" width="14" height="14"><path d="M9.96976 1.70572L13.1554 3.93629L10.9019 8.12317L11.5158 11.605L10.7192 12.7427L2.52767 7.00693L3.3243 5.86922L6.80612 5.25528L9.96976 1.70572Z" stroke="currentColor"></path><path d="M6.05285 9.47511C6.27284 9.16094 6.70586 9.08458 7.02003 9.30457C7.3342 9.52455 7.41055 9.95757 7.19057 10.2717L3.98587 14.4708L3.21223 13.9291L6.05285 9.47511Z" stroke="currentColor"></path></svg></span>
+        <span class="icon-btn danger">
+          <svg viewBox="0 0 16 16" fill="none" stroke-width="1" width="14" height="14">
+            <path d="M1.28149 3.88831H14.7187" stroke="currentColor"></path>
+            <path d="M5.41602 3.88833V2.47962C5.41602 2.29282 5.52492 2.11366 5.71876 1.98157C5.9126 1.84948 6.17551 1.77527 6.44964 1.77527H9.55053C9.82466 1.77527 10.0876 1.84948 10.2814 1.98157C10.4753 2.11366 10.5842 2.29282 10.5842 2.47962V3.88833" stroke="currentColor"></path>
+            <path d="M2.57349 3.88831L3.19366 13.2943C3.21937 13.5502 3.33952 13.7872 3.53065 13.9593C3.72178 14.1313 3.97016 14.2259 4.22729 14.2246H11.7728C12.0299 14.2259 12.2783 14.1313 12.4694 13.9593C12.6605 13.7872 12.7807 13.5502 12.8064 13.2943L13.4266 3.88831" stroke="currentColor"></path>
+            <path d="M6.44946 6.98926V11.1238" stroke="currentColor"></path>
+            <path d="M9.55054 6.98926V11.1238" stroke="currentColor"></path>
+          </svg>
+        </span>
+      </span>
+    </div>
+    <div class="row"><span class="dot"></span> 修复导出乱码 <span class="acts"><span class="when">周二</span></span></div>
+  </div>
+</div>
