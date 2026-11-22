@@ -14,7 +14,7 @@ DeepSeek Harness 插件。在侧边栏删会话，删掉的先进回收站，能
 github:nk33-dev/dsh-chat-manager#path:/packages/plugin
 ```
 
-启用后重启 Harness。支持 Harness `0.2.2-rc.1`。
+启用后重启 Harness。支持 Harness `0.2.2-rc.5`。
 
 ## 功能
 

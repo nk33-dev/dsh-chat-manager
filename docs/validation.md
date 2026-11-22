@@ -1,5 +1,14 @@
 # 验证记录
 
+## 0.2.6
+
+2026-11-22。Windows，Node.js `24.16.0`，Harness SDK `0.2.2-rc.5`，Zod `4.6.6`。
+
+- `engines.dsh`、DSH peerDependencies 和开发 SDK 统一为 `0.2.2-rc.5`，Zod 与宿主对齐为 `4.6.6`。
+- `pnpm peers check`、Host 与 Client 类型检查通过；`pnpm test`：3 个文件、51 项通过。
+- `pnpm pack:plugin`：构建、客户端 6 个槽位注册及归档校验通过，生成 `dist/chat-manager-0.2.6.tgz`。
+- 本轮未启动真实 Harness，安装升级和实际会话删除、恢复未验证。
+
 ## 0.2.5
 
 2026-11-08。Windows 11，Node 24.16.0，Harness `0.2.2-rc.1`。

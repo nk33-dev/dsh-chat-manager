@@ -14,7 +14,7 @@ In Harness, open **Plugins → Add plugin** (arrow) → **Install a third-party 
 github:nk33-dev/dsh-chat-manager#path:/packages/plugin
 ```
 
-Enable the plugin and restart Harness. Requires Harness `0.2.2-rc.1`.
+Enable the plugin and restart Harness. Requires Harness `0.2.2-rc.5`.
 
 ## Features
 
